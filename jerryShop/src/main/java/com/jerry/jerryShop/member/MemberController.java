@@ -49,10 +49,11 @@ public class MemberController {
 		}
 		
 		try {
-			memberService.create(memberJoinForm.getUsername(), memberJoinForm.getPassword1(), memberJoinForm.getName(), memberJoinForm.getEmail(), memberJoinForm.getMobile(), memberJoinForm.getAddress(), memberJoinForm.getPostNumber());
+			memberService.create(memberJoinForm.getUsername(), memberJoinForm.getPassword1(), memberJoinForm.getName(), memberJoinForm.getEmail(), memberJoinForm.getMobile(), 
+					memberJoinForm.getAddress(), memberJoinForm.getPostNumber(), memberJoinForm.getDetailAddress(), memberJoinForm.getExtraAddress());
 		} catch(DataIntegrityViolationException e) {
 			e.printStackTrace();
-			bindingResult.reject("joinFailed", "이미 등록된 아이디 입니다.");
+			bindingResult.reject("joinFailed", "이미 등록된 아이디 혹은 이메일 주소 입니다.");
 			return "member/join_form";
 		} catch(Exception e) {
 			e.printStackTrace();

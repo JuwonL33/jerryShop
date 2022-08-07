@@ -24,7 +24,7 @@ public class MemberService {
 	private final PasswordEncoder passwordEncoder;
 	
 	public Member create(String userId, String password, String name, String email, 
-			String mobile, String address, String postNumber) {
+			String mobile, String address, String postNumber, String detailAddress, String extraAddress) {
 		Member member = new Member();
 		member.setUsername(userId);
 		member.setPassword(passwordEncoder.encode(password));
@@ -33,6 +33,8 @@ public class MemberService {
 		member.setMobile(mobile);
 		member.setAddress(address);
 		member.setPostNumber(postNumber);
+		member.setDetailAddress(detailAddress);
+		member.setExtraAddress(extraAddress);
 		member.setJoinedDate(LocalDateTime.now());
 		member.setMemberGrade("blue");
 		this.memberRepository.save(member);

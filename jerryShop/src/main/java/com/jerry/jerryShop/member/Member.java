@@ -44,6 +44,10 @@ public class Member {
 	
 	private String postNumber;
 	
+	private String detailAddress;
+	
+	private String extraAddress;
+	
 	private String name;
 	
 	@Column(columnDefinition = "varchar(10) default 'blue'")

@@ -39,6 +39,10 @@ public class MemberJoinForm {
     
     private String postNumber;
     
+    private String detailAddress;
+    
+    private String extraAddress;
+    
     @NotEmpty(message = "이름을 입력해주세요.")
     private String name;
 }
