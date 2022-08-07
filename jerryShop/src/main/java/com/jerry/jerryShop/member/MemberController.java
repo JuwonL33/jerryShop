@@ -2,6 +2,7 @@ package com.jerry.jerryShop.member;
 
 import javax.validation.Valid;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,8 +48,27 @@ public class MemberController {
 			return "member/join_form";
 		}
 		
-		memberService.create(memberJoinForm.getUserId(), memberJoinForm.getPassword1(), memberJoinForm.getName(), memberJoinForm.getEmail(), memberJoinForm.getMobile(), memberJoinForm.getAddress(), memberJoinForm.getPostNumber());
+		try {
+			memberService.create(memberJoinForm.getUsername(), memberJoinForm.getPassword1(), memberJoinForm.getName(), memberJoinForm.getEmail(), memberJoinForm.getMobile(), memberJoinForm.getAddress(), memberJoinForm.getPostNumber());
+		} catch(DataIntegrityViolationException e) {
+			e.printStackTrace();
+			bindingResult.reject("joinFailed", "이미 등록된 아이디 입니다.");
+			return "member/join_form";
+		} catch(Exception e) {
+			e.printStackTrace();
+			bindingResult.reject("joinFailed", e.getMessage());
+			return "member/join_form";
+		}
 		
 		return "redirect:/";
+	}
+	
+	/*
+	 * login_form.html 템플릿을 렌더링하는 GET 방식의 login 메서드를 추가했다. 
+	 * 실제 로그인을 진행하는 @PostMapping 방식의 메서드는 스프링 시큐리티가 대신 처리하므로 직접 구현할 필요가 없다.
+	 */
+	@GetMapping("/login")
+	public String login() {
+		return "member/login_form";
 	}
 }

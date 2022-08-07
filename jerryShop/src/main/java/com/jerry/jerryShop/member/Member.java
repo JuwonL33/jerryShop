@@ -29,7 +29,7 @@ public class Member {
 	private Long id;
 	
 	@Column(unique = true)
-	private String userId;
+	private String username;
 	
 	private String password;
 	

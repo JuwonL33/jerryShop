@@ -20,7 +20,7 @@ import lombok.Setter;
 public class MemberJoinForm {
 	@Size(min = 3, max = 50)
 	@NotEmpty(message = "아이디를 입력해주세요.")
-	private String userId;
+	private String username;
 	
 	@NotEmpty(message = "비밀번호를 입력해주세요.")
 	private String password1;

@@ -3,6 +3,7 @@ package com.jerry.jerryShop.member;
 import java.time.LocalDateTime;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -20,12 +21,12 @@ import lombok.RequiredArgsConstructor;
 public class MemberService {
 	
 	private final MemberRepository memberRepository;
+	private final PasswordEncoder passwordEncoder;
 	
 	public Member create(String userId, String password, String name, String email, 
 			String mobile, String address, String postNumber) {
 		Member member = new Member();
-		member.setUserId(userId);
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		member.setUsername(userId);
 		member.setPassword(passwordEncoder.encode(password));
 		member.setName(name);
 		member.setEmail(email);
