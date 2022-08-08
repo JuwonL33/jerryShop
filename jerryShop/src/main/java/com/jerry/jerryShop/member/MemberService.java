@@ -1,8 +1,10 @@
 package com.jerry.jerryShop.member;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,5 +41,13 @@ public class MemberService {
 		member.setMemberGrade("blue");
 		this.memberRepository.save(member);
 		return member;
+	}
+	
+	public Optional<Member> findUsernameByNameAndEmail(String name, String email) {
+        return this.memberRepository.findUsernameByNameAndEmail(name, email);
+	}
+	
+	public Optional<Member> findByUsernameAndEmail(String email, String username) {
+		return this.memberRepository.findByUsernameAndEmail(username, email);
 	}
 }

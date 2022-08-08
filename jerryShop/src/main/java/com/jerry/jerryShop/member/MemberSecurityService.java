@@ -32,7 +32,6 @@ public class MemberSecurityService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Member> _member = this.memberRepository.findByusername(username);
         if (_member.isEmpty()) {
-        	System.out.println(username);
             throw new UsernameNotFoundException("사용자를 찾을수 없습니다.");
         }
         Member member = _member.get();

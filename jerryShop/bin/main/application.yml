@@ -18,3 +18,16 @@ spring:
           org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
+      
+  # 메일
+  mail :
+    host : smtp.naver.com
+    port : 465
+    username : leejw2013@naver.com
+    password : wndnjsWidmd51
+    properties :
+      mail : 
+        smtp : 
+          auth : true
+          ssl : 
+            enable : true
