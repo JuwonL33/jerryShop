@@ -26,10 +26,10 @@ public class EmailService {
 	
 	private final MemberRepository memberRepository;
 	
-	private JavaMailSender mailSender;
+	private final JavaMailSender mailSender;
 	
-	/*@Value("${mail.username}")
-	private final String from_addr;*/
+	@Value("${spring.mail.username}")
+	private String from_addr;
 	
 	@Transactional
 	public Mail createMailAndChangePassword(String email, String username) {
@@ -69,14 +69,14 @@ public class EmailService {
 	}
 	
 	public void sendMail(Mail mail) {
-		log.info("비밀번호 찾기 이메일 전송 완료");
+		
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(mail.getAddress());
-		// message.setFrom(from_addr);
-		message.setFrom("leejw2013@naver.com");
+		message.setFrom(from_addr);
 		message.setSubject(mail.getTitle());
 		message.setText(mail.getMessage());
+		log.info("비밀번호 찾기 이메일 전송 완료");
 		
-		mailSender.send(message);
+		this.mailSender.send(message);
 	}
 }
