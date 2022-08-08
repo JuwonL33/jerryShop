@@ -7,26 +7,20 @@
 				<div class="find-idpw-title">
 					<h4 class="member_title">아이디 찾기</h4>
 				</div>
-			    <form th:action="@{/member/findidpw}" id="findIdform" method="post">
+			    <form role="form">
 			    	<p>회원가입 시, 입력하신 이름 + 이메일로 아이디를 확인하실 수 있습니다.</p>
-		        	<!-- <div th:replace="/common/form_errors :: formErrorsFragment"></div> -->
 			        <div class="mb-3">
-			            <input type="text" name="name" id="name" class="txt-form form-control" placeholder="이름">
+			            <input type="text" name="name" id="name" class="txt-form form-control" placeholder="이름" required>
 			        </div>
 			        <div class="mb-5">
-			            <input type="text" name="email" id="email" class="txt-form form-control" placeholder="이메일">
+			            <input type="text" name="email" id="email" class="txt-form form-control" placeholder="이메일" required>
 			        </div>
 			        <div>
-			        	<a type="button" class="member_button btn btn-danger btn-lg btn-block">아이디 찾기</a>
+			        	<a type="button" id="findIdBtn" class="member_button btn btn-danger btn-lg btn-block">아이디 찾기</a>
 			        </div>
 			    </form>
-			    <div class="alert alert-success" style="font-size: 18px;" role="alert" th:if="${member}">
-				    <div th:text="${member.username}" />
-				</div>
-			    <div class="alert alert-danger" style="font-size: 18px;" role="alert" th:if="${notFoundUser}">
-				    <div th:text="${notFoundUser}" />
-				</div>
 			</div>
+			
 			<div class="find-pw">
 				<div class="find-idpw-title">
 					<h4 class="member_title">비밀번호 찾기</h4>
@@ -35,10 +29,10 @@
 			    	<p>가입하신 아이디 + 이메일을 입력, 본인인증을 통해 이메일로 임시 비밀번호로 보내드립니다.
 			    	<br>확인 후 로그인 하셔서 반드시 비밀번호를 변경하시기 바랍니다.</p>
 			        <div class="mb-3">
-			            <input type="text" name="username" id="usernamePw" class="txt-form form-control" placeholder="아이디">
+			            <input type="text" name="username" id="usernamePw" class="txt-form form-control" placeholder="아이디" required>
 			        </div>
 			        <div class="mb-5">
-			            <input type="text" name="email" id="emailPw" class="txt-form form-control" placeholder="이메일">
+			            <input type="text" name="email" id="emailPw" class="txt-form form-control" placeholder="이메일" required>
 			        </div>
 			        <div>
 			        	<a type="button" id="sendEmailBtn" class="member_button btn btn-danger btn-lg btn-block">비밀번호 찾기</a>
@@ -48,43 +42,81 @@
 		</div>
 	</div>
 	<script layout:fragment="script" type='text/javascript'>
+	
+        let header = $("meta[name='_csrf_header']").attr("content");
+        let token = $("meta[name='_csrf']").attr("content");
+        
+		$("#findIdBtn").click(function(){
+			let email = $("#email").val();
+			let name = $("#name").val();
+			
+			if(!name){
+				swal("알림", "이름을 입력해주세요.", "warning");
+			}else if(!email){
+				swal("알림", "이메일을 입력해주세요.", "warning");
+			}else{
+			$.ajax({
+				type: "POST",
+				url : "/member/findidpw",
+				data : {
+					"email" : email,
+					"name" : name
+				},
+				beforeSend: function (xhr){
+		           xhr.setRequestHeader(header, token);
+				},
+				success : function(result){
+					if (result['check'] != "false"){
+						swal("아이디 찾기 성공", "회원님의 아이디는 "+result['check']+" 입니다.", "success");
+							} else {
+								swal("아이디 찾기 실패", "일치하는 정보가 없습니다.", "error");
+							}
+						}
+					})
+				}
+			});
+	
 		$("#sendEmailBtn").click(function(){
 			let email = $("#emailPw").val();
 			let username = $("#usernamePw").val();
-            let header = $("meta[name='_csrf_header']").attr("content");
-            let token = $("meta[name='_csrf']").attr("content");
-            
-			$.ajax({
-				type: "GET",
-				url : "/member/findPw",
-				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-				data : {
-					"email" : email,
-					"username" : username
-				},
-				success : function(result, xhr){
-					if (result['check']){
-						$.ajax({
-							type: "POST",
-							url : "/member/findPw",
-							data : {
-								"email" : email,
-								"username" : username
-							},
-							beforeSend: function (xhr){
-					           xhr.setRequestHeader(header, token);
-							},
-							success : function(){
-								swal("발송 완료!", "입력하신 이메일로 임시번호가 발송되었습니다.", "success").then((OK) => {
-									window.location = "/member/login";
-								})
-							}
-						})
-					} else {
-						swal("발송 실패", "일치하는 정보가 없습니다.", "error");
+			
+            if(!username){
+				swal("알림", "아이디를 입력해주세요.", "warning");
+			}else if(!email){
+				swal("알림", "이메일을 입력해주세요.", "warning");
+			}else{
+				$.ajax({
+					type: "GET",
+					url : "/member/findPw",
+					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+					data : {
+						"email" : email,
+						"username" : username
+					},
+					success : function(result, xhr){
+						if (result['check']){
+							$.ajax({
+								type: "POST",
+								url : "/member/findPw",
+								data : {
+									"email" : email,
+									"username" : username
+								},
+								beforeSend: function (xhr){
+						           xhr.setRequestHeader(header, token);
+								},
+								success : function(){
+									swal("발송 완료!", "입력하신 이메일로 임시번호가 발송되었습니다.", "success").then((OK) => {
+										window.location = "/member/login";
+									})
+								}
+							})
+						} else {
+							swal("발송 실패", "일치하는 정보가 없습니다.", "error");
+						}
 					}
-				}
-			})
+				})
+			}
 		})
 	</script>
 </html>

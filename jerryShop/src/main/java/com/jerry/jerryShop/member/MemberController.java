@@ -90,28 +90,27 @@ public class MemberController {
 	 * 실제 로그인을 진행하는 @PostMapping 방식의 메서드는 스프링 시큐리티가 대신 처리하므로 직접 구현할 필요가 없다.
 	 */
 	@GetMapping("/findidpw")
-	public String findidpw(MemberFindForm memberFindForm) {
+	public String findidpw() {
 		return "member/find_id_pw";
 	}
 	
 	@PostMapping("/findidpw")
-	public String findidpw(@Valid MemberFindForm memberFindForm, BindingResult bindingResult, Model model) {
+	public @ResponseBody Map<String, String> findidpw(String email, String name) {
 		// 에러가 발생하면 회원가입 폼으로 돌아감
 		// return to the join form if form has an errors
-		if (bindingResult.hasErrors()) {
-			return "member/find_id_pw";
-		}
-		
-		Optional<Member> _member = memberService.findUsernameByNameAndEmail(memberFindForm.getName(), memberFindForm.getEmail());
+		Map<String, String> json = new HashMap<>();
+		Optional<Member> _member = this.memberService.findUsernameByNameAndEmail(name, email);
+
 
         if (_member.isEmpty()) {
-        	model.addAttribute("notFoundUser", "존재하지 않는 사용자입니다.");
-        	return "member/find_id_pw";
+        	json.put("check", "false");
+	       
+        }else {
+        	Member member = _member.get();
+        	json.put("check", member.getUsername());
         }
 		
-        Member member = _member.get();
-        model.addAttribute("member", member);
-		return "member/find_id_pw";
+        return json;
 	}
 	
 	@GetMapping("/findPw")
