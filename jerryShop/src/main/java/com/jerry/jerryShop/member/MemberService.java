@@ -67,4 +67,14 @@ public class MemberService {
 		this.memberRepository.save(member);
 		return member;
 	}
+	
+	public boolean updatePassword(Member member, String curPassword, String newPassword) {
+		if(!passwordEncoder.matches(curPassword, member.getPassword())) {
+			return false;
+		}else {
+			member.setPassword(passwordEncoder.encode(newPassword));
+			this.memberRepository.save(member);
+			return true;
+		}
+	}
 }

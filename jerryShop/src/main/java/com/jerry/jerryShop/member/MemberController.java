@@ -10,13 +10,13 @@ import javax.validation.Valid;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
@@ -44,6 +44,7 @@ public class MemberController {
 
 	private final MemberService memberService;
 	private final EmailService emailService;
+	private final PasswordEncoder passwordEncoder;
 	
 	@GetMapping("/join")
 	public String join(MemberJoinForm memberJoinForm) {
@@ -174,4 +175,31 @@ public class MemberController {
     	model.addAttribute("member", updateMember);
 		return "member/mypage";
 	}
+    
+    @PreAuthorize("isAuthenticated()")
+	@GetMapping("/mypage/changePassword")
+	public String changePassword(Principal principal) {
+		return "member/change_password";
+	}
+    /*
+     * result Code : 4 -> 현재 비밀번호 불일치
+     */
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/mypage/changePassword")
+    public @ResponseBody Map<String, Boolean> changePassword(Principal principal, String curPassword, String newPassword1, String newPassword2){
+    	
+    	HashMap<String, Boolean> json = new HashMap<>();
+    	
+    	Optional<Member> _member = this.memberService.findByusername(principal.getName());
+		if(_member.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 사용자입니다.");
+		}
+		
+		Member member = _member.get();
+		
+		boolean result = this.memberService.updatePassword(member, curPassword, newPassword1);
+		json.put("result", result);
+		
+		return json;
+    }
 }
