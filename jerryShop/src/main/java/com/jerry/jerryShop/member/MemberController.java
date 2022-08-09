@@ -1,5 +1,6 @@
 package com.jerry.jerryShop.member;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -7,13 +8,18 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.jerry.jerryShop.util.EmailService;
 import com.jerry.jerryShop.util.Mail;
@@ -122,15 +128,50 @@ public class MemberController {
 		}else {
 			json.put("check", true);
 		}
-		log.info(json.toString());
 		return json;
 	}
 	
 	@PostMapping("/findPw")
 	public @ResponseBody void sendEmail(String email, String username) {
-		log.info("findPW Controller 입장");
 		Mail mail = this.emailService.createMailAndChangePassword(email, username);
 		this.emailService.sendMail(mail);
-		// return "member/find_id_pw";
+	}
+	
+    @PreAuthorize("isAuthenticated()")
+	@GetMapping("/mypage/{username}")
+	public String myPage(@PathVariable("username") String username, Model model, Principal principal) {
+		Optional<Member> _member = this.memberService.findByusername(username);
+		if(_member.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 사용자입니다.");
+		}
+		
+		Member member = _member.get();
+    	if (!member.getUsername().equals(principal.getName())) {
+    		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 사용자가 아닙니다.");
+		}
+    	
+    	model.addAttribute("member", member);
+		return "member/mypage";
+	}
+    
+    @PreAuthorize("isAuthenticated()")
+	@PostMapping("/mypage/{username}")
+	public String myPage(@PathVariable("username") String username, Principal principal, Model model, String name, String email, 
+			String mobile, String address, String postNumber, String detailAddress, String extraAddress) {
+    	
+    	Optional<Member> _member = this.memberService.findByusername(username);
+		if(_member.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 사용자입니다.");
+		}
+		
+		Member member = _member.get();
+    	if (!member.getUsername().equals(principal.getName())) {
+    		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 사용자가 아닙니다.");
+		}
+    	
+    	Member updateMember = this.memberService.updateMyInfo(member, name, email, mobile, address, postNumber, detailAddress, extraAddress);
+    	
+    	model.addAttribute("member", updateMember);
+		return "member/mypage";
 	}
 }

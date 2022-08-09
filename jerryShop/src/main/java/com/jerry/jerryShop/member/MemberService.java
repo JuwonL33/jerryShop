@@ -50,4 +50,21 @@ public class MemberService {
 	public Optional<Member> findByUsernameAndEmail(String email, String username) {
 		return this.memberRepository.findByUsernameAndEmail(username, email);
 	}
+	
+	public Optional<Member> findByusername(String username) {
+		return this.memberRepository.findByusername(username);
+	}
+	
+	public Member updateMyInfo(Member member, String name, String email, 
+			String mobile, String address, String postNumber, String detailAddress, String extraAddress) {
+		member.setName(name);
+		member.setEmail(email);
+		member.setMobile(mobile);
+		member.setAddress(address);
+		member.setPostNumber(postNumber);
+		member.setDetailAddress(detailAddress);
+		member.setExtraAddress(extraAddress);
+		this.memberRepository.save(member);
+		return member;
+	}
 }
