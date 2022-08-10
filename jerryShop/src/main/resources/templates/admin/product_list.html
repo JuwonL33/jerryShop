@@ -1,0 +1,39 @@
+<html layout:decorate="~{admin}">
+<div layout:fragment="content" class="container my-3">
+	<div class="page-body" style="display: block;">
+	    <div class="my-3">
+	        <div>
+	            <h2 class="member_title">상품 목록</h2>
+	        </div>
+	    </div>
+	    <table>
+		    <thead>
+		        <tr>
+		        	<th>대분류</th>
+		        	<th>소분류</th>
+		            <th>상품명</th>
+		            <th>가격</th>
+		            <th>할인가격</th>
+		            <th>등록일</th>
+		            <th>판매수</th>
+		            <th>재고</th>
+		        </tr>
+		    </thead>
+		    <tbody>
+		        <tr th:each="product : ${productList}">
+		            <td th:text="${product.category1}"></td>
+		            <td th:text="${product.category2}"></td>
+		            <td th:text="${product.productName}"></td>
+		            <td th:text="${product.price}"></td>
+		            <td th:text="${product.discount}"></td>
+		            <td th:text="${product.registrationDate}"></td>
+		            <td th:text="${product.discountRatio}"></td>
+		            <td th:text="${product.stock}"></td>
+		        </tr>
+		    </tbody>
+		</table>
+	     <a class="btn btn-primary" sec:authorize="hasRole('ROLE_ADMIN')" th:href-"@{/admin/product/create}">상품 등록</a>
+	</div>
+</div>
+
+</html>

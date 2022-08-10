@@ -1,0 +1,166 @@
+<html layout:decorate="~{admin}">
+	<div layout:fragment="content" class="container my-3">
+		<div class="page-body" style="display: block;">
+		    <div class="my-3">
+		        <div>
+		            <h2 class="product_title">상품등록
+		            </h2>
+		        </div>
+		    </div>
+	
+		    <form role="form" method="post" enctype="multipart/form-data">
+		        <div class="member-join-form mt-5">
+		        	<h5>기본정보</h5>
+			        <div class="mt-4 mb-3">
+			            <!-- <label for="username" class="form-label">아이디</label> -->
+			            <input type="text" class="txt-form form-control" placeholder="상품명">
+			        </div>
+			        <div class="mb-3">
+			            <!-- <label for="password" class="form-label">비밀번호</label> -->
+			            <input type="number" class="txt-form form-control" placeholder="가격">
+			        </div>
+			        <div class="mb-3">
+			            <!-- <label for="password" class="form-label">비밀번호 확인</label> -->
+			            <input type="number" class="txt-form form-control"  placeholder="할인율">
+			        </div>
+			        <div class="mb-3">
+			            <!-- <label for="password" class="form-label">비밀번호 확인</label> -->
+			            <input type="number" class="txt-form form-control"  placeholder="할인가격">
+			        </div>
+			        <div class="mb-3">
+			            <!-- <label for="password" class="form-label">비밀번호 확인</label> -->
+			            <input type="number" class="txt-form form-control"  placeholder="재고">
+			        </div>
+			        <div class="mt-4 mb-3">
+			            <!-- <label for="username" class="form-label">아이디</label> -->
+			            <input type="text" class="txt-form form-control" placeholder="상세설명">
+			        </div>
+			        <div class="mt-4 mb-3">
+			            <!-- <label for="username" class="form-label">아이디</label> -->
+			            <input type="text" class="txt-form form-control" placeholder="배송방법">
+			        </div>
+			        <div class="mt-4 mb-3">
+			            <!-- <label for="username" class="form-label">아이디</label> -->
+			            <input type="selectbox" class="txt-form form-control" placeholder="대분류">
+			        </div>
+			        <div class="mt-4 mb-3">
+			            <!-- <label for="username" class="form-label">아이디</label> -->
+			            <select name="category1" id="category1">
+			            	<option value="">대분류</option>
+			            	<option value="choco">초콜릿</option>
+			            	<option value="jelly">구미/젤리</option>
+			            	<option value="candy">캔디</option>
+			            	<option value="gum">캐러멜/껌</option>
+			            	<option value="marshmallow">마쉬멜로우</option>
+			            	<option value="snack">스낵</option>
+			            </select>
+			        
+			            <select name="category2" id="category2">
+			            	<option value="">소분류</option>
+			            	<option value="choco-fruit">과일초콜릿</option>
+			            	<option value="choco-nut">너트초콜릿</option>
+			            	<option value="choco-cookie">쿠키초콜릿</option>
+			            	<option value="choco-labt">랩트초콜릿</option>
+			            	<option value="choco-brand">브랜드초콜릿</option>
+			            	<option value="choco-package">초콜릿패키지</option>
+			            	
+			            	<option value="jelly-gummy">구미</option>
+			            	<option value="jelly-jelly">젤리</option>
+			            	<option value="jelly-jellybean">젤리빈</option>
+			            	<option value="jelly-gummypackage">구미패키지</option>
+			            </select>
+			        </div>
+			        <div class="mt-4 mb-3">
+			            <!-- <label for="username" class="form-label">아이디</label> -->
+			            <input type="file" class="txt-form form-control" name="image1" placeholder="썸네일">
+			            <button class=" btn btn-primary btn-lg btn-block" type="button" id="imageUploadBtn">업로드</button>
+			        </div>
+			        <div class="mt-2 mb-3" id="thumbnail-area">
+			        
+			        </div>
+		        </div>
+		        
+		        <div class="mt-5">
+		        	<button type="submit" class="member_button btn btn-danger btn-lg btn-block">상품등록</button>
+		        </div>
+		    </form>
+		</div>
+	</div>
+	
+	<script layout:fragment="script" type='text/javascript'>
+	 let header = $("meta[name='_csrf_header']").attr("content");
+     let token = $("meta[name='_csrf']").attr("content");
+    
+		$('#imageUploadBtn').click(function(){
+			let formData = new FormData();
+			
+			let inputFile = $("input[type='file']");
+			
+			let files = inputFile[0].files;
+			
+			for (var i = 0; i < files.length; i++){
+				console.log(files[i]);
+				formData.append("files", files[i]);
+			}
+			
+		$.ajax({
+			url: '/uploadFiles',
+			processData: false,
+			contentType: false,
+			data: formData,
+			type: 'POST',
+			dataType: 'json',
+			beforeSend: function (xhr){
+	           xhr.setRequestHeader(header, token);
+			},
+			success: function(result){
+				console.log(result);
+				showUploadedImages(result);
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				console.log(textStatus);
+			}
+			
+			});
+		});
+		
+	function showUploadedImages(arr){
+		console.log(arr);
+		
+		let divArea = $("#thumbnail-area");
+
+		let str = "";
+				
+		for(let i = 0; i < arr.length; i++){
+			str += "<div>";
+			str += "<img src='/display?fileName="+arr[i].imageURL+"'>";
+			str += "<button class='removeBtn btn btn-dark btn-sm btn-block' data-name='"+arr[i].imageURL+"'>REMOVE</button>"
+			str += "</div>"
+		}
+		divArea.append(str);
+	}
+	
+	$("#thumbnail-area").on("click", ".removeBtn", function(e){
+		
+		let target = $(this);
+		let fileName = target.data("name");
+		let targetDiv = $(this).closest("div");
+		
+		console.log(fileName);
+		
+		$.ajax({
+			type: 'POST',
+			url: '/removeFile',
+			data: {"fileName" : fileName},
+			beforeSend: function (xhr){
+	           xhr.setRequestHeader(header, token);
+			},
+			success: function(result){
+				if(result === true){
+					targetDiv.remove();}
+			}
+			});
+	});
+	
+	</script>
+</html>

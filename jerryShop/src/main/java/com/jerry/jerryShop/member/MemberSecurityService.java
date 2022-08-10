@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /*
  * JerryShop Member Security Service -> 작성 후 SecurityConfig에 등록
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
  * Copyright (C) 2022 by Jerry, All right reserved.
  */
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class MemberSecurityService implements UserDetailsService {
@@ -36,8 +38,9 @@ public class MemberSecurityService implements UserDetailsService {
         }
         Member member = _member.get();
         List<GrantedAuthority> authorities = new ArrayList<>();
-        if ("admin".equals(username)) {
+        if ("admin".equals(username)) {        	
             authorities.add(new SimpleGrantedAuthority(MemberRole.ADMIN.getValue()));
+        	log.info("admin? :" + authorities);
         } else {
             authorities.add(new SimpleGrantedAuthority(MemberRole.USER.getValue()));
         }

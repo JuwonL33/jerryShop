@@ -1,0 +1,13 @@
+<html layout:decorate="~{admin}">
+<div layout:fragment="content" class="container my-3">
+	<div class="page-body" style="display: block;">
+	    <div class="my-3">
+	        <div>
+	            <h2 class="member_title">관리자페이지</h2>
+	        </div>
+	    </div>
+	    <a class="btn btn-primary" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/product/list}">상품 목록</a>
+	</div>
+</div>
+
+</html>

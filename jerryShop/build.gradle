@@ -26,6 +26,7 @@ dependencies {
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
     implementation 'org.springframework.boot:spring-boot-starter-validation'		// Spring Boot Validation 라이브러리 / 화면에서 전달받은 입력값을 검증 
     implementation 'org.springframework.boot:spring-boot-starter-mail'			
+    implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.11'	// Thumbnailator 썸네일 제작해주는 라이브러리. 가로x세로 사이즈를 결정하면 비율에 맞게 조정을 해준다.
 }
 
 tasks.named('test') {
