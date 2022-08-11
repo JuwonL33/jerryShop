@@ -44,6 +44,8 @@ public class UploadController {
 	@PostMapping("/uploadFiles")
 	public ResponseEntity<List<UploadResult>> uploadFiles(MultipartFile[] files) {
 		
+		System.out.println("들어오긴와?;;;");
+		
 		List<UploadResult> uploadResultList = new ArrayList<>();
 		for (MultipartFile file : files) {
 			

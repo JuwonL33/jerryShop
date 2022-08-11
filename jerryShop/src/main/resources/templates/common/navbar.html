@@ -9,6 +9,7 @@
             <ul class="member_wrapper navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                 	<a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{|/member/mypage/${#authentication.getPrincipal().getUsername()}|}">마이페이지</a>
+                	<a class="nav-link" sec:authorize="hasRole('ROLE_ADMIN')"  th:href="@{/admin/}">관리자 페이지</a>
                     <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/member/login}">로그인/회원가입</a>
                 	<a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/member/logout}">로그아웃</a>
                 </li>
