@@ -27,7 +27,7 @@ class JerryShopApplicationTests {
 		String category1 = "candy";
 		String category2 = "candy";
 		
-		this.adminService.create(productName, price, discountRatio, stock, image1, image2, image3, detail, delivery, category1, category2);
+		// this.adminService.create(productName, price, discountRatio, stock, image1, image2, image3, detail, delivery, category1, category2);
 	}
 
 }

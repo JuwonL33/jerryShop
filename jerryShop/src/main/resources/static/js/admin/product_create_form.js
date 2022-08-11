@@ -1,49 +1,42 @@
- let header = $("meta[name='_csrf_header']").attr("content");
- let token = $("meta[name='_csrf']").attr("content");
 
-	$('#imageUploadBtn').click(function(){
-		let formData = new FormData();
-		
-		let inputFile = $("input[type='file']");
+let header = $("meta[name='_csrf_header']").attr("content");
+let token = $("meta[name='_csrf']").attr("content");
+
+$('#imageUploadBtn').click(function(){
+	let formData = new FormData();
 	
-		let files = inputFile[0].files;
-		
-		if (files.length == 0){
-			swal("데이터 없음", "한 개 이상의 이미지를 추가해주세요.", "warning");
-		}
-		
-		for (var i = 0; i < files.length; i++){
-			console.log(files[i]);
-			formData.append("files", files[i]);
-		}
-		
-	$.ajax({
-		url: '/uploadFiles',
-		processData: false,
-		contentType: false,
-		data: formData,
-		type: 'POST',
-		dataType: 'json',
-		beforeSend: function (xhr){
-           xhr.setRequestHeader(header, token);
-		},
-		success: function(result){
-			    if (result) {               
-			alert("완료");           
-			} else {               
-			alert("전송된 값 없음");           
-			}
+	let inputFile = $("input[type='file']");
 
-			alert("들어오냐니까?");
-			console.log(result);
-			showUploadedImages(result);
-		},
-		error: function(){
-			alert("아냐?");
-		}
-		
-		});
-	});
+	let files = inputFile[0].files;
+	
+	if (files.length == 0){
+		swal("데이터 없음", "한 개 이상의 이미지를 추가해주세요.", "warning");
+	}
+	
+	for (var i = 0; i < files.length; i++){
+		console.log(files[i]);
+		formData.append("files", files[i]);
+	}
+		$.ajax({
+			url: '/uploadFiles',
+			processData: false,
+			contentType: false,
+			data: formData,
+			type: 'POST',
+			dataType: 'json',
+			beforeSend: function (xhr){
+		       xhr.setRequestHeader(header, token); 
+			},
+			success: function(result){
+				console.log(result);
+				showUploadedImages(result);
+			},
+			error: function(){
+				alert("error");
+			}
+			
+			});
+});
 	
 function showUploadedImages(arr){
 	console.log(arr);
@@ -53,8 +46,8 @@ function showUploadedImages(arr){
 	let str = "";
 			
 	for(let i = 0; i < arr.length; i++){
-		str += "<div>";
-		str += "<img src='/display?fileName="+arr[i].folderPath+"/s_"+arr[i].uuid+arr[i].fileName+"'>";
+		str += "<div >";
+		str += "<img name=image"+(i+1)+" src='/display?fileName="+arr[i].folderPath+"/s_"+arr[i].uuid+arr[i].fileName+"'>";
 		str += "<button class='removeBtn btn btn-dark btn-sm btn-block' data-name='"+arr[i].imageURL+"'>REMOVE</button>"
 		str += "</div>"
 	}
@@ -113,6 +106,7 @@ $("#productCreateBtn").click(function(){
 	}else if(!productFrm.category2){
 		swal("필수입력", "소분류를 선택해주세요.", "warning");
 	}else{
+		console.log(productFrm);
 		$.ajax({
 		type: 'POST',
 		url: '/admin/product/create',
@@ -125,7 +119,7 @@ $("#productCreateBtn").click(function(){
 		success: function(result){
 			console.log(result)
 		},error:function(request,status,error){        
-		alert("code = "+ request.status + " message = " + request.responseText + " error = " + error); // 실패 시 처리       
+			console.log("code = "+ request.status + " message = " + request.responseText + " error = " + error); // 실패 시 처리       
 		},     complete : function(data) {                 
 		//  실패했어도 완료가 되었을 때 처리        
 		}

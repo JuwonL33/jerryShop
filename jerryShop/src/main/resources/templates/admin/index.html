@@ -9,6 +9,10 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+	<!-- csrf -->
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
+	<meta name="_csrf" th:content="${_csrf.token}">
+	
     <title>JerryShop Admin Page</title>
 	<script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
 	<!-- JQuery CDN -->
@@ -78,11 +82,11 @@
 
     <!-- Bootstrap core JavaScript-->
     <script th:src="@{/js/bootstrap.min.js}"></script>
-    <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+    <!-- <script th:src="@{/vendor/jquery/jquery.min.js}"></script> -->
     <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
+    <!-- Core plugin JavaScript
+    <script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>-->
 
     <!-- Custom scripts for all pages-->
     <script th:src="@{/js/admin/sb-admin-2.min.js}"></script>

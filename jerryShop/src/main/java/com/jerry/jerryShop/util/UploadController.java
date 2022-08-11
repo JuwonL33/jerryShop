@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,6 +27,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,7 +42,8 @@ public class UploadController {
 	@Value("${jerry.upload.path}")
 	private String uploadPath;
 	
-	@PostMapping("/uploadFiles")
+	//@PostMapping("/uploadFiles")
+	@RequestMapping(value = "/uploadFiles", method = RequestMethod.POST)
 	public ResponseEntity<List<UploadResult>> uploadFiles(MultipartFile[] files) {
 		
 		System.out.println("들어오긴와?;;;");

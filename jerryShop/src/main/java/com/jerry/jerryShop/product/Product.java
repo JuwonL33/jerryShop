@@ -44,11 +44,9 @@ public class Product {
 	
 	private long stock;
 	
-	private String image1;
+	private String imageName;
 	
-	private String image2;
-	
-	private String image3;
+	private String imagePath;
 	
 	private String detail;
 	
