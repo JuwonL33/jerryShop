@@ -8,44 +8,40 @@
 		        </div>
 		    </div>
 	
-		    <form role="form" method="post" enctype="multipart/form-data">
+		    <form role="form" method="post" id="productCreatForm" enctype="multipart/form-data">
 		        <div class="member-join-form mt-5">
 		        	<h5>기본정보</h5>
 			        <div class="mt-4 mb-3">
 			            <!-- <label for="username" class="form-label">아이디</label> -->
-			            <input type="text" class="txt-form form-control" placeholder="상품명">
+			            <input type="text" class="txt-form form-control" name="productName" placeholder="상품명">
 			        </div>
 			        <div class="mb-3">
 			            <!-- <label for="password" class="form-label">비밀번호</label> -->
-			            <input type="number" class="txt-form form-control" placeholder="가격">
+			            <input type="number" class="txt-form form-control" name="price" placeholder="가격">
 			        </div>
 			        <div class="mb-3">
 			            <!-- <label for="password" class="form-label">비밀번호 확인</label> -->
-			            <input type="number" class="txt-form form-control"  placeholder="할인율">
+			            <input type="number" class="txt-form form-control" name="discountRatio" placeholder="할인율">
 			        </div>
 			        <div class="mb-3">
 			            <!-- <label for="password" class="form-label">비밀번호 확인</label> -->
-			            <input type="number" class="txt-form form-control"  placeholder="할인가격">
+			            <input type="number" class="txt-form form-control" name="discount" placeholder="할인가격">
 			        </div>
 			        <div class="mb-3">
 			            <!-- <label for="password" class="form-label">비밀번호 확인</label> -->
-			            <input type="number" class="txt-form form-control"  placeholder="재고">
+			            <input type="number" class="txt-form form-control" name="stock" placeholder="재고">
 			        </div>
 			        <div class="mt-4 mb-3">
 			            <!-- <label for="username" class="form-label">아이디</label> -->
-			            <input type="text" class="txt-form form-control" placeholder="상세설명">
+			            <input type="text" class="txt-form form-control" name="detail" placeholder="상세설명">
 			        </div>
 			        <div class="mt-4 mb-3">
 			            <!-- <label for="username" class="form-label">아이디</label> -->
-			            <input type="text" class="txt-form form-control" placeholder="배송방법">
+			            <input type="text" class="txt-form form-control" name="delivery" placeholder="배송방법">
 			        </div>
 			        <div class="mt-4 mb-3">
 			            <!-- <label for="username" class="form-label">아이디</label> -->
-			            <input type="selectbox" class="txt-form form-control" placeholder="대분류">
-			        </div>
-			        <div class="mt-4 mb-3">
-			            <!-- <label for="username" class="form-label">아이디</label> -->
-			            <select name="category1" id="category1">
+			            <select class="form-select" name="category1" id="category1" style="display:inline; width:49%">
 			            	<option value="">대분류</option>
 			            	<option value="choco">초콜릿</option>
 			            	<option value="jelly">구미/젤리</option>
@@ -55,7 +51,7 @@
 			            	<option value="snack">스낵</option>
 			            </select>
 			        
-			            <select name="category2" id="category2">
+			            <select class="form-select" name="category2" id="category2" style="display:inline; width:49%">
 			            	<option value="">소분류</option>
 			            	<option value="choco-fruit">과일초콜릿</option>
 			            	<option value="choco-nut">너트초콜릿</option>
@@ -71,9 +67,8 @@
 			            </select>
 			        </div>
 			        <div class="mt-4 mb-3">
-			            <!-- <label for="username" class="form-label">아이디</label> -->
-			            <input type="file" class="txt-form form-control" name="image1" placeholder="썸네일">
-			            <button class=" btn btn-primary btn-lg btn-block" type="button" id="imageUploadBtn">업로드</button>
+			            <input type="file" class="txt-form form-control" name="image1" placeholder="썸네일" style="display:inline; width:85%">
+			            <button class=" btn btn-primary btn-block" type="button" id="imageUploadBtn">업로드</button>
 			        </div>
 			        <div class="mt-2 mb-3" id="thumbnail-area">
 			        
@@ -81,7 +76,7 @@
 		        </div>
 		        
 		        <div class="mt-5">
-		        	<button type="submit" class="member_button btn btn-danger btn-lg btn-block">상품등록</button>
+		        	<button type="submit" id="productCreateBtn" class="member_button btn btn-danger btn-lg btn-block">상품등록</button>
 		        </div>
 		    </form>
 		</div>
@@ -95,8 +90,13 @@
 			let formData = new FormData();
 			
 			let inputFile = $("input[type='file']");
-			
+		
 			let files = inputFile[0].files;
+			
+			if (files.length == 0){
+				swal("데이터 없음", "한 개 이상의 이미지를 추가해주세요.", "warning");
+			}
+			
 			
 			for (var i = 0; i < files.length; i++){
 				console.log(files[i]);
@@ -133,7 +133,7 @@
 				
 		for(let i = 0; i < arr.length; i++){
 			str += "<div>";
-			str += "<img src='/display?fileName="+arr[i].imageURL+"'>";
+			str += "<img src='/display?fileName="+arr[i].folderPath+"/s_"+arr[i].uuid+arr[i].fileName+"'>";
 			str += "<button class='removeBtn btn btn-dark btn-sm btn-block' data-name='"+arr[i].imageURL+"'>REMOVE</button>"
 			str += "</div>"
 		}
@@ -146,8 +146,6 @@
 		let fileName = target.data("name");
 		let targetDiv = $(this).closest("div");
 		
-		console.log(fileName);
-		
 		$.ajax({
 			type: 'POST',
 			url: '/removeFile',
@@ -157,10 +155,59 @@
 			},
 			success: function(result){
 				if(result === true){
-					targetDiv.remove();}
+					targetDiv.remove();
+				}
 			}
 			});
 	});
+	
+	/*
+	 * form 데이터 json 형태로 변환하는 소스. 매우 
+	 */
+	jQuery.fn.serializeObject = function() { 
+      var obj = null; 
+      try { 
+          if(this[0].tagName && this[0].tagName.toUpperCase() == "FORM" ) { 
+              var arr = this.serializeArray(); 
+              if(arr){ obj = {}; 
+              jQuery.each(arr, function() { 
+                  obj[this.name] = this.value; }); 
+              } 
+          } 
+      }catch(e) { 
+          alert(e.message); 
+      }finally {} 
+      return obj; 
+    }
+	
+	$("#productCreateBtn").click(function(){
+		const productFrm = $('#productCreatForm').serializeObject();
+		
+		if(productFrm.productName == ""){
+			swal("필수입력", "상품명을 입력해주세요.", "warning");
+		}else if(!productFrm.price){
+			swal("필수입력", "가격을 입력해주세요.", "warning");
+		}else if(!productFrm.category1){
+			swal("필수입력", "대분류를 선택해주세요.", "warning");
+		}else if(!productFrm.category2){
+			swal("필수입력", "소분류를 선택해주세요.", "warning");
+		}else if(!productFrm.image1){
+			swal("필수입력", "이미지를 선택해주세요.", "warning");
+		}else{
+			$.ajax({
+			type: 'POST',
+			url: '/admin/product/create',
+			headers: {'Content-Type': 'application/json'},
+			data: JSON.stringify(productFrm),
+			beforeSend: function (xhr){
+	           xhr.setRequestHeader(header, token);
+			},
+			success: function(result){
+				console.log(result)
+			}
+			});
+		}
+	})
 	
 	</script>
 </html>

@@ -6,7 +6,7 @@
 	            <h2 class="member_title">관리자페이지</h2>
 	        </div>
 	    </div>
-	    <a class="btn btn-primary" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/product/list}">상품 목록</a>
+	    <a class="btn btn-primary" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/product/create}">상품 등록</a>
 	</div>
 </div>
 

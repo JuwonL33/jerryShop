@@ -72,7 +72,7 @@ public class UploadController {
 				file.transferTo(savePath);
 
 				// 썸네일 생성 -> 썸네일 파일 이름은 중간에 s_로 시작
-				String thumbnailSaveName = uploadPath + File.separator + folderPath + File.separator + "s_" + uuid + "_" + fileName;
+				String thumbnailSaveName = uploadPath + File.separator + folderPath + File.separator + "s_" + uuid + fileName;
 				
 				File thumbnailFile = new File(thumbnailSaveName);
 				
@@ -80,7 +80,6 @@ public class UploadController {
 				Thumbnailator.createThumbnail(savePath.toFile(), thumbnailFile, 100, 100);
 				
 				uploadResultList.add(new UploadResult(fileName, uuid, folderPath));
-				System.out.println(uploadResultList.get(0));
 				
 			}catch(IOException e) {
 				e.printStackTrace();
@@ -99,16 +98,12 @@ public class UploadController {
 			File file = new File(uploadPath + File.separator + srcFileName);
 			
 			boolean result = file.delete();
-			
+			System.out.println("원본 삭제 : " + result);
 			File thumbnail = new File(file.getParent(), "s_" + file.getName());
-
-			try {
-				Thread.sleep(1000);									// 삭제 했는데도 자꾸 delete 떠서 시간 지연을 줌
-				} catch (InterruptedException e1) 
-			{}
+			System.out.println("썸네일 : " + thumbnail);
 			
 			result = thumbnail.delete();
-			System.out.println(result);
+			System.out.println("썸네일 삭제 : " + result);
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -121,7 +116,7 @@ public class UploadController {
 		log.info("getImage().........." + fileName);
 		
 		File file = new File(uploadPath +"/"+fileName);
-		
+		log.info("getImage() Thumbnail Path.........." + file);
 		ResponseEntity<byte[]> result = null;
 				
 		try {
