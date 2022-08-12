@@ -22,6 +22,7 @@
                                 <tr>
 						        	<th>대분류</th>
 						        	<th>소분류</th>
+						        	<th>이미지</th>
 						            <th>상품명</th>
 						            <th>가격</th>
 						            <th>할인율</th>
@@ -35,6 +36,7 @@
                                 <tr>
 						        	<th>대분류</th>
 						        	<th>소분류</th>
+						        	<th>이미지</th>
 						            <th>상품명</th>
 						            <th>가격</th>
 						            <th>할인율</th>
@@ -48,6 +50,7 @@
                    		        <tr th:each="product : ${productList}">
 						            <td th:text="${product.category1}"></td>
 						            <td th:text="${product.category2}"></td>
+						            <td><img th:src="@{|/display?fileName=${product.imagePath}|}" style="width:100px; height:100px;"/></td>
 						            <td th:text="${product.productName}"></td>
 						            <td th:text="${product.price}"></td>
 						            <td th:if="${product.discountRatio != 0}" th:text="${product.discountRatio}"></td>

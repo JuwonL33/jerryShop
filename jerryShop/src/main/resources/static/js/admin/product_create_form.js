@@ -30,9 +30,6 @@ $('#imageUploadBtn').click(function(){
 			success: function(result){
 				console.log(result);
 				showUploadedImages(result);
-			},
-			error: function(){
-				alert("error");
 			}
 			
 			});
@@ -46,9 +43,11 @@ function showUploadedImages(arr){
 	let str = "";
 			
 	for(let i = 0; i < arr.length; i++){
-		str += "<div >";
-		str += "<img name=image"+(i+1)+" src='/display?fileName="+arr[i].folderPath+"/s_"+arr[i].uuid+arr[i].fileName+"'>";
+		str += "<div>";
+		str += "<img src='/display?fileName="+arr[i].folderPath+"/s_"+arr[i].uuid+arr[i].fileName+"'>";
 		str += "<button class='removeBtn btn btn-dark btn-sm btn-block' data-name='"+arr[i].imageURL+"'>REMOVE</button>"
+		str += "<div name='imageName' id='imageName' value='"+arr[i].fileName+"' style='display:none'></div>";
+		str += "<div name='imagePath' id='imagePath' value='"+arr[i].folderPath+"/"+arr[i].uuid+arr[i].fileName+"' style='display:none'></div>";
 		str += "</div>"
 	}
 	divArea.append(str);
@@ -76,7 +75,7 @@ $("#thumbnail-area").on("click", ".removeBtn", function(e){
 });
 
 /*
- * form 데이터 json 형태로 변환하는 소스. 매우 
+ * form 데이터 json 형태로 변환하는 소스. 매우유용
  */
 jQuery.fn.serializeObject = function() { 
   var obj = null; 
@@ -95,7 +94,13 @@ jQuery.fn.serializeObject = function() {
 }
 
 $("#productCreateBtn").click(function(){
-	const productFrm = $('#productCreatForm').serializeObject();
+		
+	let productFrm = $('#productCreatForm').serializeObject();
+	
+	if($("#imageName").attr("value") && $("#imagePath").attr("value") ){
+		productFrm["imageName"] = $("#imageName").attr("value");
+		productFrm["imagePath"] = $("#imagePath").attr("value");
+	}
 	
 	if(productFrm.productName == ""){
 		swal("필수입력", "상품명을 입력해주세요.", "warning");
@@ -106,10 +111,9 @@ $("#productCreateBtn").click(function(){
 	}else if(!productFrm.category2){
 		swal("필수입력", "소분류를 선택해주세요.", "warning");
 	}else{
-		console.log(productFrm);
 		$.ajax({
 		type: 'POST',
-		url: '/admin/product/create',
+		url: '/product/create',
 	 	cache : false,
 		headers: {'Content-Type': 'application/json'},
 		data: JSON.stringify(productFrm),
@@ -118,6 +122,7 @@ $("#productCreateBtn").click(function(){
 		},
 		success: function(result){
 			console.log(result)
+			window.location = "/product/list";
 		},error:function(request,status,error){        
 			console.log("code = "+ request.status + " message = " + request.responseText + " error = " + error); // 실패 시 처리       
 		},     complete : function(data) {                 

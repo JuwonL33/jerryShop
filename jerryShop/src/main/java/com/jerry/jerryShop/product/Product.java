@@ -56,6 +56,8 @@ public class Product {
 	
 	private String category2;
 	
+	private String origin;
+	
 	private LocalDateTime registrationDate;
 	
 	private int hit;

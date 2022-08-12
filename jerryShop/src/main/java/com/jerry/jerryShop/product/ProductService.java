@@ -34,10 +34,10 @@ private final ProductRepository productRepository;
 		long price = Long.parseLong(productFrm.get("price").toString());
 		int discountRatio = Integer.parseInt(productFrm.get("discountRatio").toString());
 		long stock = Long.parseLong(productFrm.get("stock").toString());
-
-		String image1 = productFrm.get("image1").toString();
-		String image2 = productFrm.get("image2").toString();
-		String image3 = productFrm.get("image3").toString();
+		
+		String origin = productFrm.get("origin").toString();
+		String imageName = productFrm.get("imageName").toString();
+		String imagePath = productFrm.get("imagePath").toString();
 		String detail = productFrm.get("detail").toString();
 		String delivery = productFrm.get("delivery").toString();
 
@@ -51,8 +51,9 @@ private final ProductRepository productRepository;
 		product.setDiscountRatio(discountRatio);
 		product.setDiscount(price-(price*discountRatio/100));
 		product.setStock(stock);
-		//product.setImageName(imageName);
-		//product.setImagePath(imagePath);
+		product.setOrigin(origin);
+		product.setImageName(imageName);
+		product.setImagePath(imagePath);
 		product.setDetail(detail);
 		product.setDelivery(delivery);
 		product.setCategory1(category1);

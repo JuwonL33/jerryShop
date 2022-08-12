@@ -37,25 +37,5 @@ public class AdminController {
 	public String index() {
 		return "admin/adminContents";
 	}
-	
-	@GetMapping("/product/list")
-	public String product_list(Model model) {
-		
-		List<Product> productList = this.productService.findAll();
-		
-		model.addAttribute("productList", productList);
-		return "admin/product_list";
-	}
-	
-	@GetMapping("/product/create")
-	public String product_create() {
-		return "admin/product_create_form";
-	}
-	
-	@PostMapping("/product/create")
-	public String product_create(@RequestBody HashMap<String, Object> productFrm) throws ParseException {
-		this.productService.create(productFrm);
-		log.info("...........productFrm : " + productFrm);
-		return "redirect:/admin/product_list";
-	}
+
 }

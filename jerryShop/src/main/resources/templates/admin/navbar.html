@@ -36,8 +36,8 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">상품 관리 페이지:</h6>
-                <a class="collapse-item" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/product/list}">상품목록</a>
-                <a class="collapse-item" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/product/create}">상품등록</a>
+                <a class="collapse-item" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/product/list}">상품목록</a>
+                <a class="collapse-item" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/product/create}">상품등록</a>
             </div>
         </div>
     </li>
