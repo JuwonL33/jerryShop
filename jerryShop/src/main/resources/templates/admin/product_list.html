@@ -18,8 +18,22 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                          <colgroup>
+                          	<col width="5%"/>
+						    <col width="7%"/>
+						    <col width="6%"/>
+						    <col width="8%" />
+						    <col width="23%"/>
+						    <col width="5%"  />
+						    <col width="7%"  />
+						    <col width="8%"  />
+						    <col width="8%"  />
+						    <col width="7%"  />
+						    <col width="5%"  />
+						  </colgroup>
                             <thead>
-                                <tr>
+                                <tr style="text-align: center;">
+                                	<th>품번</th>
 						        	<th>대분류</th>
 						        	<th>소분류</th>
 						        	<th>이미지</th>
@@ -33,7 +47,8 @@
                                 </tr>
                             </thead>
                             <tfoot>
-                                <tr>
+                                <tr style="text-align: center;">
+                                	<th>품번</th>
 						        	<th>대분류</th>
 						        	<th>소분류</th>
 						        	<th>이미지</th>
@@ -46,12 +61,13 @@
 						            <th>재고</th>
                                 </tr>
                             </tfoot>
-                            <tbody>
+                            <tbody style="text-align: center;">
                    		        <tr th:each="product : ${productList}">
+                   		        	<td th:text="${product.id}"></td>
 						            <td th:text="${product.category1}"></td>
 						            <td th:text="${product.category2}"></td>
 						            <td><img th:src="@{|/display?fileName=${product.imagePath}|}" style="width:100px; height:100px;"/></td>
-						            <td th:text="${product.productName}"></td>
+						            <td><a th:href="@{|/product/detail/${product.id}|}" th:text="${product.productName}"></a></td>
 						            <td th:text="${product.price}"></td>
 						            <td th:if="${product.discountRatio != 0}" th:text="${product.discountRatio}"></td>
 						            <td th:if="${product.discountRatio == 0}" text="-"></td>

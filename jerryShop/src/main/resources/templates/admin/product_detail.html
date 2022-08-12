@@ -1,0 +1,102 @@
+<html layout:decorate="~{admin/index}">
+	<div layout:fragment="content" class="container my-3">
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+            <!-- Page Heading -->
+            <h1 class="h3 mb-2 text-gray-800">상품 상세</h1>
+            <!--
+            <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
+                For more information about DataTables, please visit the <a target="_blank"
+                    href="https://datatables.net">official DataTables documentation</a>.</p> -->
+
+            <!-- DataTales Example -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Products List</h6>
+                </div>
+                <div class="card-body">
+					<div class="product_wrap">
+		                <div id="productDetail">
+		                	<div class="thumb-info-wrap">
+							<div class="thumb-info">
+								<div class="thumb-wrap">
+									<!-- 썸네일 슬라이드 [시작] -->
+									<div class="thumb_container">
+										<table>
+											<tr>
+												<td style="width: 400px; text-align: center;">
+													<div class="slider" style="border: 1px solid #ededed; box-sizing: border-box;">
+	                                                	<img th:src="@{|/display?fileName=${product.imagePath}|}" style="width: 100%; height: auto;"></li>
+													</div>
+												</td>
+	
+												<td style="width: 600px;">
+													<div class="info" style="margin-left:10%; border-top: 2px solid #222;  ">
+														<div class="info_wrap">
+															<p class="icon_share"></p>
+															<h3 class="tit-prd" id="productId" th:text="${product.id}" style="display:none;">
+															</h3>
+															<h3 class="tit-prd" th:text="${product.productName}" style="font-weight: bold; font-size: 25px; padding-top:10px; padding-bottom:20px; color: #222; text-align: left; border-bottom: 1.5px solid #ededed;">
+																<span class="tit-sub" style="font-size: 18px;color: #666;text-align: left;display: block;width: 100%;padding-top: 20px;letter-spacing: 1px;font-weight: 400;" th:if="${product.detail}" th:text="${product.detail}"></span>
+																<span class="icons"></span>
+															</h3>
+															<h3 class="prc_row" style="clear: both;overflow: hidden;border-bottom: 1px solid #e5e5e5;padding: 20px 0;line-height: 30px;">
+																<span class=""><span id="pricevalue" class="price" th:text="${product.price}"></span>원</span>
+																<span class="ex_price"></span>
+															</h3>
+															<div class="table-opt">
+																<table summary="판매가격, 적립금, 주문수량, 옵션, 사이즈, 상품조르기, sns" style="margin-top: 20px;">
+																	<tbody>
+																		<tr>
+																			<th scope="row"><div class="tb-left" style="font-size: 16px; padding: 0px 0 20px 10px;">판매가</div></th>
+																			<td class="price" style="font-size: 16px; padding: 0px 0 20px 10px;"><span id="pricevalue" class="price" th:text="${product.discount}"></span>원</td>
+																		</tr>
+																		<tr>
+																			<th scope="row"><div class="tb-left" style="font-size: 16px; padding: 0px 0 20px 10px;">원산지</div></th>
+																			<td style="font-size: 16px; padding: 0px 0 20px 10px;">
+																				<div class="tb-left" th:text="${product.origin}"></div>
+																			</td>
+																		</tr>
+																		<tr>                            																																							<tr>
+																			<th scope="row"><div class="tb-left" style="font-size: 16px; padding: 0px 0 20px 10px;">배송비</div></th>
+																			<td style="font-size: 16px; padding: 0px 0 20px 10px;">
+																				<div class="tb-left">
+																					<span style="color:#666;" th:text="${product.delivery}"></span>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr>
+																			<th scope="row"><div class="tb-left" style="font-size: 16px; padding: 0px 0 20px 10px;">재고</div></th>
+																			<td style="font-size: 16px; padding: 0px 0 20px 10px;">
+																				<div class="tb-left" th:text="${product.stock}"></div>
+																			</td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
+					
+															<!-- 수량 옵션 basic -->
+													</div><!-- .info -->
+												</td>
+											</tr>
+										</table>
+										<a th:href="@{|/product/modify/${product.id}|}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                						<i class="fas fa-download fa-sm text-white-50"></i> 상품 수정 </a>
+										<button id="productDeleteBtn" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                						<i class="fas fa-download fa-sm text-white-50"></i> 상품 삭제 </button>
+									</div>
+									<!-- 썸네일 슬라이드 [끝] -->
+								</div><!-- .thumb-wrap -->
+							
+
+							</div><!-- .thumb-info -->
+						</div>
+						</div>
+					</div>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+</html>

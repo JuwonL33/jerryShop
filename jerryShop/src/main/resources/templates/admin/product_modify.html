@@ -1,0 +1,109 @@
+<html layout:decorate="~{admin/index}">
+	<div layout:fragment="content" class="container my-3">
+	       <!-- Begin Page Content -->
+        <div class="container-fluid">
+	
+	            <!-- Page Heading -->
+	            <h1 class="h3 mb-2 text-gray-800">상품 수정</h1>
+	            <!--
+	            <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
+	                For more information about DataTables, please visit the <a target="_blank"
+	                    href="https://datatables.net">official DataTables documentation</a>.</p> -->
+	
+	            <!-- DataTales Example -->
+	            <div class="card shadow mb-4">
+	                <div class="card-header py-3">
+	                    <h6 class="m-0 font-weight-bold text-primary">상품 수정 페이지</h6>
+	                </div>
+	                <div class="card-body">
+						<form role="form" method="post" id="productModifyFrm" enctype="multipart/form-data">
+					        <div class="member-join-form">
+						        <div class="mt-2 mb-3" style="display: none;">
+						            <input type="text" class="txt-form form-control" th:value="${product.id}" name="productId" placeholder="품번">
+						        </div>
+						        <div class="mt-2 mb-3">
+						            <input type="text" class="txt-form form-control" th:value="${product.productName}" name="productName" placeholder="상품명">
+						        </div>
+						        <div class="mt-4 mb-3">
+						            <input type="text" class="txt-form form-control" th:value="${product.detail}" name="detail" placeholder="상세설명">
+						        </div>
+						        <div class="mb-3">
+						            <input type="number" class="txt-form form-control" th:value="${product.price}" name="price" placeholder="가격">
+						        </div>
+						        <div class="mb-3">
+						            <input type="number" class="txt-form form-control" th:value="${product.discountRatio}" name="discountRatio" placeholder="할인율">
+						        </div>
+						        <div class="mb-3">
+						            <input type="number" class="txt-form form-control" th:value="${product.discount}" name="discount" placeholder="할인가격">
+						        </div>
+						        <div class="mb-3">
+						            <input type="number" class="txt-form form-control" th:value="${product.stock}" name="stock" placeholder="재고">
+						        </div>
+
+						        <div class="mt-4 mb-3">
+						            <input type="text" class="txt-form form-control" th:value="${product.origin}" name="origin" placeholder="원산지">
+						        </div>
+						        <div class="mt-4 mb-3">
+						            <input type="text" class="txt-form form-control" th:value="${product.delivery}" name="delivery" placeholder="배송방법">
+						        </div>
+						        <div class="mt-4 mb-3">
+						            <select class="form-select" name="category1" id="category1" style="display:inline; width:49%">
+						            	<option value="">대분류</option>
+						            	<option th:value="${product.category1}" th:text="${product.category1}" th:selected="${product.category1}">
+						            	<option value="choco">초콜릿</option>
+						            	<option value="jelly">구미/젤리</option>
+						            	<option value="candy">캔디</option>
+						            	<option value="gum">캐러멜/껌</option>
+						            	<option value="marshmallow">마쉬멜로우</option>
+						            	<option value="snack">스낵</option>
+						            </select>
+						        
+						            <select class="form-select" name="category2" id="category2" style="display:inline; width:49%">
+						            	<option value="">소분류</option>
+						            	<option th:value="${product.category2}" th:text="${product.category2}" th:selected="${product.category2}">
+						            	<option value="choco-fruit">과일초콜릿</option>
+						            	<option value="choco-nut">너트초콜릿</option>
+						            	<option value="choco-cookie">쿠키초콜릿</option>
+						            	<option value="choco-labt">랩트초콜릿</option>
+						            	<option value="choco-brand">브랜드초콜릿</option>
+						            	<option value="choco-package">초콜릿패키지</option>
+						            	
+						            	<option value="jelly-gummy">구미</option>
+						            	<option value="jelly-jelly">젤리</option>
+						            	<option value="jelly-jellybean">젤리빈</option>
+						            	<option value="jelly-gummypackage">구미패키지</option>
+						            </select>
+						        </div>
+						        <div class="mt-4 mb-3">
+						            <input type="file" class="txt-form form-control" placeholder="썸네일" style="display:inline; width:85%">
+						            <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="button" id="imageUploadBtn"><i class="fas fa-download fa-sm text-white-50"></i> 업로드</button>
+						        </div>
+						        <div class="mt-2 mb-3" id="thumbnail-area">
+						        	<img th:src="@{|/display?fileName=${product.imagePath}|}" th:if="${product.imagePath}" style="width: 100%; height: auto;">
+						        	<button class='removeBtn btn btn-dark btn-sm btn-block' th:if="${product.imagePath}" th:data-name="${product.imagePath}">REMOVE</button>
+						        </div>
+					        </div>
+					        
+					        <div class="mt-5">
+					        	<a type="button" id="productModifyBtn" class="d-sm-inline-block btn btn-sm btn-success btn-icon-split shadow-sm"><span class="icon text-white-50">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        <span class="text">상품수정</span></a>
+					        	<a type="button" href="javascript:history.back()" class="d-sm-inline-block btn btn-sm btn-dark btn-icon-split shadow-sm">
+					        		<span class="icon text-white-50">
+                                    	<i class="fas fa-arrow-right"></i>
+                                	</span>
+                                	<span class="text">취소</span>
+                                </a>
+					        </div>
+					    </form>
+	                </div>
+	
+	            </div>
+	        </div>
+	        <!-- /.container-fluid -->
+	        </div>
+	    </div>
+<script layout:fragment="script" type='text/javascript'>
+</script>
+</html>

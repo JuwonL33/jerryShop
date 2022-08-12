@@ -54,11 +54,10 @@ function showUploadedImages(arr){
 }
 
 $("#thumbnail-area").on("click", ".removeBtn", function(e){
-	
 	let target = $(this);
 	let fileName = target.data("name");
 	let targetDiv = $(this).closest("div");
-	
+
 	$.ajax({
 		type: 'POST',
 		url: '/removeFile',

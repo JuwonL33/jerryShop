@@ -1,8 +1,6 @@
 package com.jerry.jerryShop.product;
 
-import java.security.Principal;
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,6 +9,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +35,7 @@ public class ProductController {
 	
 	
 	@GetMapping("/list")
-	public String product_list(Model model, @AuthenticationPrincipal User user) {
+	public String list(Model model, @AuthenticationPrincipal User user) {
 		if(user.getAuthorities().toString().equals("[ROLE_ADMIN]")) {
 			List<Product> productList = this.productService.findAll();
 			model.addAttribute("productList", productList);
@@ -48,7 +47,7 @@ public class ProductController {
 
 	
 	@GetMapping("/create")
-	public String product_create(@AuthenticationPrincipal User user) {
+	public String create(@AuthenticationPrincipal User user) {
 		if(user.getAuthorities().toString().equals("[ROLE_ADMIN]")) {
 			return "admin/product_create_form";
 		}else {
@@ -57,11 +56,56 @@ public class ProductController {
 	}
 	
 	@PostMapping("/create")
-	public String product_create(@RequestBody HashMap<String, Object> productFrm, @AuthenticationPrincipal User user) throws ParseException {
+	public String create(@RequestBody HashMap<String, Object> productFrm, @AuthenticationPrincipal User user) throws ParseException {
 		if(user.getAuthorities().toString().equals("[ROLE_ADMIN]")) {
 			log.info("...........productFrm : " + productFrm);
 			this.productService.create(productFrm);
 			return "redirect:/product/list";
+		}else {
+			return "redirect:/member/login";
+		}
+	}
+
+	@GetMapping("/detail/{id}")
+	public String detail(@AuthenticationPrincipal User user, @PathVariable("id") Long id, Model model) {
+		if(user.getAuthorities().toString().equals("[ROLE_ADMIN]")) {
+			Product product = this.productService.detail(id);
+			model.addAttribute("product", product);
+			return "admin/product_detail";
+		}else {
+			return "redirect:/member/login";
+		}
+	}
+	
+	@GetMapping("/modify/{id}")
+	public String modify(@AuthenticationPrincipal User user, @PathVariable("id") Long id, Model model) {
+		if(user.getAuthorities().toString().equals("[ROLE_ADMIN]")) {
+			Product product = this.productService.detail(id);
+			model.addAttribute("product", product);
+			return "admin/product_modify";
+		}else {
+			return "redirect:/member/login";
+		}
+	}
+	
+	@PostMapping("/modify/{id}")
+	public String modify(@RequestBody HashMap<String, Object> productModifyFrm, @AuthenticationPrincipal User user, @PathVariable("id") Long id) throws ParseException {
+		if(user.getAuthorities().toString().equals("[ROLE_ADMIN]")) {
+			log.info("............productModifyFrm:"+productModifyFrm);
+			this.productService.modify(id, productModifyFrm);
+			return "admin/product_detail";
+		}else {
+			return "redirect:/member/login";
+		}
+	}
+	
+	@GetMapping("/delete/{id}")
+	public String delete(@AuthenticationPrincipal User user, @PathVariable("id") Long id) {
+		if(user.getAuthorities().toString().equals("[ROLE_ADMIN]")) {
+			System.out.println("들어왔다");
+			Product product = this.productService.detail(id);
+			this.productService.delete(product);
+			return "admin/product_list";
 		}else {
 			return "redirect:/member/login";
 		}

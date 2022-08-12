@@ -60,6 +60,8 @@ public class Product {
 	
 	private LocalDateTime registrationDate;
 	
+	private LocalDateTime modifyDate;
+	
 	private int hit;
 	
 	private int saleCount;
