@@ -49,33 +49,16 @@
 						        <div class="mt-4 mb-3">
 						            <select class="form-select" name="category1" id="category1" style="display:inline; width:49%">
 						            	<option value="">대분류</option>
-						            	<option th:value="${product.category1}" th:text="${product.category1}" th:selected="${product.category1}">
-						            	<option value="choco">초콜릿</option>
-						            	<option value="jelly">구미/젤리</option>
-						            	<option value="candy">캔디</option>
-						            	<option value="gum">캐러멜/껌</option>
-						            	<option value="marshmallow">마쉬멜로우</option>
-						            	<option value="snack">스낵</option>
+						            	<option th:if="${product.category1}" id="currentSelectedCategory1" style="display:none" th:value="${product.category1}">
 						            </select>
 						        
 						            <select class="form-select" name="category2" id="category2" style="display:inline; width:49%">
 						            	<option value="">소분류</option>
-						            	<option th:value="${product.category2}" th:text="${product.category2}" th:selected="${product.category2}">
-						            	<option value="choco-fruit">과일초콜릿</option>
-						            	<option value="choco-nut">너트초콜릿</option>
-						            	<option value="choco-cookie">쿠키초콜릿</option>
-						            	<option value="choco-labt">랩트초콜릿</option>
-						            	<option value="choco-brand">브랜드초콜릿</option>
-						            	<option value="choco-package">초콜릿패키지</option>
-						            	
-						            	<option value="jelly-gummy">구미</option>
-						            	<option value="jelly-jelly">젤리</option>
-						            	<option value="jelly-jellybean">젤리빈</option>
-						            	<option value="jelly-gummypackage">구미패키지</option>
+						            	<option th:if="${product.category2}" id="currentSelectedCategory2" style="display:none" th:value="${product.category2}">
 						            </select>
 						        </div>
 						        <div class="mt-4 mb-3">
-						            <input type="file" class="txt-form form-control" placeholder="썸네일" style="display:inline; width:85%">
+						            <input type="file" th:if="${product.imageName}" th:value="${product.imageName}" class="txt-form form-control" placeholder="썸네일" style="display:inline; width:85%">
 						            <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="button" id="imageUploadBtn"><i class="fas fa-download fa-sm text-white-50"></i> 업로드</button>
 						        </div>
 						        <div class="mt-2 mb-3" id="thumbnail-area">
@@ -105,5 +88,94 @@
 	        </div>
 	    </div>
 <script layout:fragment="script" type='text/javascript'>
+	let currentSelectedCategory1 = $("#currentSelectedCategory1").val();
+	let currentSelectedCategory2 = $("#currentSelectedCategory2").val();
+		
+
+	$(document).ready(function(){
+		getCategory1List();
+		category2List(Number(currentSelectedCategory1));
+	});
+	
+	function getCategory1List(){
+		$.ajax({
+			url: '/category/list',
+			dataType: 'json',
+			type: 'GET',
+			success: function(result){
+				showCategoryList(result);
+			}
+		});
+	}
+	
+;
+
+	function showCategoryList(result){
+
+		let cate1Arr = new Array();
+		let cate1Obj = new Object();
+		
+		// 1차 분류 셀렉트 박스에 삽입할 데이터 준비
+		for(let i = 0; i < result.length; i++) {
+			 if(result[i]["depth"] == 1) {
+			  cate1Obj = new Object();
+			  cate1Obj.categoryId = result[i]["id"];
+			  cate1Obj.name = result[i]["name"];
+			  cate1Arr.push(cate1Obj);
+			 }
+		}
+		
+		let cate1Select = $("#category1")
+		
+		for(var i = 0; i < cate1Arr.length; i++) {
+			if(Number(currentSelectedCategory1) === cate1Arr[i].categoryId){
+				cate1Select.append("<option value='" + cate1Arr[i].categoryId + "' selected>"+ cate1Arr[i].name + "</option>"); 
+			}else{
+		 cate1Select.append("<option value='" + cate1Arr[i].categoryId + "'>"
+		      + cate1Arr[i].name + "</option>"); 
+		      }
+		}
+
+	}
+	
+	function category2List(parent){
+		$.ajax({
+			url: '/category/list/child',
+			data: {
+				"parent" : parent
+			},
+			type: 'GET',
+			success: function(result){
+				console.log(result)
+				showCategory2List(result);
+			}
+		});
+	}
+
+	function showCategory2List(result){
+		let cate2Arr = new Array();
+		let cate2Obj = new Object();
+		
+		// 1차 분류 셀렉트 박스에 삽입할 데이터 준비
+		for(let i = 0; i < result.length; i++) {
+			 if(result[i]["depth"] == 2) {
+			  cate2Obj = new Object();
+			  cate2Obj.categoryId = result[i]["id"];
+			  cate2Obj.name = result[i]["name"];
+			  cate2Arr.push(cate2Obj);
+			 }
+		}
+		
+		let cate2Select = $("#category2")
+		
+		for(var i = 0; i < cate2Arr.length; i++) {
+			if(Number(currentSelectedCategory2) == cate2Arr[i].categoryId){
+				cate2Select.append("<option value='" + cate2Arr[i].categoryId + "' selected>"+ cate2Arr[i].name + "</option>"); 
+			}else{
+		 cate2Select.append("<option value='" + cate2Arr[i].categoryId + "'>"
+		      + cate2Arr[i].name + "</option>"); 
+		      }
+		}
+	}
 </script>
 </html>

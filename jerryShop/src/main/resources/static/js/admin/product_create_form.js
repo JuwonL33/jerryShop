@@ -137,6 +137,7 @@ $("#category1").change(function(){
 	$("#category2 option").remove();  
 	$("#category2").append('<option value="">소분류</option>');
 	
+	/*
 	$.ajax({
 			url: '/category/list/child',
 			data: {
@@ -148,7 +149,23 @@ $("#category1").change(function(){
 				showCategory2List(result);
 			}
 		});
+	*/
+	category2List(parent);
 })
+
+function category2List(parent){
+	$.ajax({
+		url: '/category/list/child',
+		data: {
+			"parent" : parent
+		},
+		type: 'GET',
+		success: function(result){
+			console.log(result)
+			showCategory2List(result);
+		}
+	});
+}
 
 function showCategory2List(result){
 	let cate2Arr = new Array();

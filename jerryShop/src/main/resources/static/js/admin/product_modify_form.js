@@ -13,8 +13,6 @@ $("#productModifyBtn").click(function(){
 		swal("필수입력", "가격을 입력해주세요.", "warning");
 	}else if(!productFrm.category1){
 		swal("필수입력", "대분류를 선택해주세요.", "warning");
-	}else if(!productFrm.category2){
-		swal("필수입력", "소분류를 선택해주세요.", "warning");
 	}else{
 		$.ajax({
 		type: 'POST',

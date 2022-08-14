@@ -42,6 +42,11 @@ public class CategoryService {
 		return results;
 	}
 	
+	public Optional<Category> findByid(Long categoryId) {
+		Optional<Category> category = this.categoryRepository.findById(categoryId);
+		return category;
+	}
+	
 	public void create(Long depth, String name) {
 		Category category = new Category();
 		category.setDepth(depth);

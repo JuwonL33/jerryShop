@@ -3,6 +3,7 @@ package com.jerry.jerryShop.product;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import org.h2.util.json.JSONArray;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -79,6 +80,7 @@ public class ProductController {
 		if(user.getAuthorities().toString().equals("[ROLE_ADMIN]")) {
 			Product product = this.productService.detail(id);
 			model.addAttribute("product", product);
+
 			return "admin/product_detail";
 		}else {
 			return "redirect:/member/login";
