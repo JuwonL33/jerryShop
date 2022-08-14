@@ -43,30 +43,15 @@
 						        <div class="mt-4 mb-3">
 						            <input type="text" class="txt-form form-control" name="delivery" placeholder="배송방법">
 						        </div>
+						        <div class="mt-4 mb-3" style="display:none" id="category1List" th:value="${category}">
+						        </div>
 						        <div class="mt-4 mb-3">
 						            <select class="form-select" name="category1" id="category1" style="display:inline; width:49%">
 						            	<option value="">대분류</option>
-						            	<option value="choco">초콜릿</option>
-						            	<option value="jelly">구미/젤리</option>
-						            	<option value="candy">캔디</option>
-						            	<option value="gum">캐러멜/껌</option>
-						            	<option value="marshmallow">마쉬멜로우</option>
-						            	<option value="snack">스낵</option>
 						            </select>
 						        
 						            <select class="form-select" name="category2" id="category2" style="display:inline; width:49%">
 						            	<option value="">소분류</option>
-						            	<option value="choco-fruit">과일초콜릿</option>
-						            	<option value="choco-nut">너트초콜릿</option>
-						            	<option value="choco-cookie">쿠키초콜릿</option>
-						            	<option value="choco-labt">랩트초콜릿</option>
-						            	<option value="choco-brand">브랜드초콜릿</option>
-						            	<option value="choco-package">초콜릿패키지</option>
-						            	
-						            	<option value="jelly-gummy">구미</option>
-						            	<option value="jelly-jelly">젤리</option>
-						            	<option value="jelly-jellybean">젤리빈</option>
-						            	<option value="jelly-gummypackage">구미패키지</option>
 						            </select>
 						        </div>
 						        <div class="mt-4 mb-3">
@@ -93,5 +78,44 @@
 	        </div>
 	    </div>
 <script layout:fragment="script" type='text/javascript'>
-</script>
+	$(document).ready(function(){
+		getCategoryList();
+	});
+	
+	function getCategoryList(){
+		$.ajax({
+			url: '/category/list',
+			dataType: 'json',
+			type: 'GET',
+			success: function(result){
+				showCategoryList(result);
+			}
+		});
+	}
+	
+	function showCategoryList(result){
+		let cate1Arr = new Array();
+		let cate1Obj = new Object();
+		
+		// 1차 분류 셀렉트 박스에 삽입할 데이터 준비
+		for(let i = 0; i < result.length; i++) {
+			 if(result[i]["depth"] == 1) {
+			  cate1Obj = new Object();
+			  cate1Obj.categoryId = result[i]["id"];
+			  cate1Obj.name = result[i]["name"];
+			  cate1Arr.push(cate1Obj);
+			 }
+		}
+		
+		// 1차 분류 셀렉트 박스에 데이터 삽입
+		let cate1Select = $("#category1")
+		
+		for(var i = 0; i < cate1Arr.length; i++) {
+		 cate1Select.append("<option value='" + cate1Arr[i].categoryId + "'>"
+		      + cate1Arr[i].name + "</option>"); 
+		}
+	}
+	
+	
+	</script>
 </html>

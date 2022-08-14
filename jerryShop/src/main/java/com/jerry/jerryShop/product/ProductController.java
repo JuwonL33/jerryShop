@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 
+import org.h2.util.json.JSONArray;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.jerry.jerryShop.category.Category;
+import com.jerry.jerryShop.category.CategoryDTO;
+import com.jerry.jerryShop.category.CategoryService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ProductController {
 
 	private final ProductService productService;
-	
+	private final CategoryService categoryService;
 	
 	@GetMapping("/list")
 	public String list(Model model, @AuthenticationPrincipal User user) {
@@ -47,8 +52,11 @@ public class ProductController {
 
 	
 	@GetMapping("/create")
-	public String create(@AuthenticationPrincipal User user) {
+	public String create(@AuthenticationPrincipal User user, Model model) {
 		if(user.getAuthorities().toString().equals("[ROLE_ADMIN]")) {
+			this.categoryService.getCategoryList();
+			// model.addAttribute("category", category);
+			
 			return "admin/product_create_form";
 		}else {
 			return "redirect:/member/login";

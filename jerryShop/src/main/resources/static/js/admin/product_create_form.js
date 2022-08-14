@@ -131,3 +131,44 @@ $("#productCreateBtn").click(function(){
 		});
 	}
 })
+
+$("#category1").change(function(){
+	let parent = $("#category1 option:selected").val();
+	$("#category2 option").remove();  
+	$("#category2").append('<option value="">소분류</option>');
+	
+	$.ajax({
+			url: '/category/list/child',
+			data: {
+				"parent" : parent
+			},
+			type: 'GET',
+			success: function(result){
+				console.log(result)
+				showCategory2List(result);
+			}
+		});
+})
+
+function showCategory2List(result){
+	let cate2Arr = new Array();
+	let cate2Obj = new Object();
+	
+	// 1차 분류 셀렉트 박스에 삽입할 데이터 준비
+	for(let i = 0; i < result.length; i++) {
+		 if(result[i]["depth"] == 2) {
+		  cate2Obj = new Object();
+		  cate2Obj.categoryId = result[i]["id"];
+		  cate2Obj.name = result[i]["name"];
+		  cate2Arr.push(cate2Obj);
+		 }
+	}
+	
+	// 1차 분류 셀렉트 박스에 데이터 삽입
+	let cate2Select = $("#category2")
+	
+	for(var i = 0; i < cate2Arr.length; i++) {
+	 cate2Select.append("<option value='" + cate2Arr[i].categoryId + "'>"
+	      + cate2Arr[i].name + "</option>"); 
+	}
+}

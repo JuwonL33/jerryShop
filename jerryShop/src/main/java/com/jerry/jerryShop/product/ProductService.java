@@ -5,9 +5,12 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.jerry.jerryShop.category.CategoryDTO;
+import com.jerry.jerryShop.category.CategoryRepository;
 import com.jerry.jerryShop.exception.DataNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -24,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class ProductService {
 private final ProductRepository productRepository;
-	
+
 	public List<Product> findAll(){
 		return this.productRepository.findAll();
 	}
