@@ -58,12 +58,17 @@
 						            </select>
 						        </div>
 						        <div class="mt-4 mb-3">
-						            <input type="file" th:if="${product.imageName}" th:value="${product.imageName}" class="txt-form form-control" placeholder="썸네일" style="display:inline; width:85%">
+
+						            <input type="file" class="txt-form form-control" placeholder="썸네일" style="display:inline; width:85%">
 						            <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="button" id="imageUploadBtn"><i class="fas fa-download fa-sm text-white-50"></i> 업로드</button>
 						        </div>
 						        <div class="mt-2 mb-3" id="thumbnail-area">
-						        	<img th:src="@{|/display?fileName=${product.imagePath}|}" th:if="${product.imagePath}" style="width: 100%; height: auto;">
-						        	<button class='removeBtn btn btn-dark btn-sm btn-block' th:if="${product.imagePath}" th:data-name="${product.imagePath}">REMOVE</button>
+						        	<div>
+							        	<img th:src="@{|/display?fileName=${product.imagePath}|}" th:if="${product.imagePath}" style="width: 100px; height: 100px;">
+							        	<button class='removeBtn btn btn-dark btn-sm btn-block' th:if="${product.imagePath}" th:data-name="${product.imagePath}">REMOVE</button>
+							        	<div id="imageName" name="imageName" th:value="${product.imageName}" th:if="${product.imageName}" style="display:none;">
+							        	<div id="imagePath" name="imagePath" th:value="${product.imagePath}" th:if="${product.imagePath}" style="display:none;">
+									</div>
 						        </div>
 					        </div>
 					        

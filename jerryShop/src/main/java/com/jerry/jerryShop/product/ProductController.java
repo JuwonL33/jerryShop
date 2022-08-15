@@ -99,10 +99,11 @@ public class ProductController {
 	}
 	
 	@PostMapping("/modify/{id}")
-	public String modify(@RequestBody HashMap<String, Object> productModifyFrm, @AuthenticationPrincipal User user, @PathVariable("id") Long id) throws ParseException {
+	public String modify(@RequestBody HashMap<String, Object> productModifyFrm, @AuthenticationPrincipal User user, @PathVariable("id") Long id, Model model) throws ParseException {
 		if(user.getAuthorities().toString().equals("[ROLE_ADMIN]")) {
 			log.info("............productModifyFrm:"+productModifyFrm);
-			this.productService.modify(id, productModifyFrm);
+			Product product = this.productService.modify(id, productModifyFrm);
+			model.addAttribute("product", product);
 			return "admin/product_detail";
 		}else {
 			return "redirect:/member/login";

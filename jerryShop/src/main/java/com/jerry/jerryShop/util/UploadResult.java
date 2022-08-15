@@ -24,4 +24,13 @@ public class UploadResult {
 		}
 		return "";
 	}
+	
+	public String getThumbnailImageURL() {
+		try {
+			return URLEncoder.encode(folderPath+"/"+uuid+"/s_"+fileName,"UTF-8");
+		} catch (UnsupportedEncodingException e){
+			e.printStackTrace();
+		}
+		return "";
+	}
 }

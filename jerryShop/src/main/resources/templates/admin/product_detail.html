@@ -27,7 +27,7 @@
 											<tr>
 												<td style="width: 400px; text-align: center;">
 													<div class="slider" style="border: 1px solid #ededed; box-sizing: border-box;">
-	                                                	<img th:src="@{|/display?fileName=${product.imagePath}|}" style="width: 100%; height: auto;"></li>
+	                                                	<img th:src="@{|/display?fileName=${product.imagePath}|}" th:if="${product.imagePath}" style="width: 100%; height: auto;"></li>
 													</div>
 												</td>
 	

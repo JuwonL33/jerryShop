@@ -5,15 +5,14 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.jerry.jerryShop.category.CategoryDTO;
-import com.jerry.jerryShop.category.CategoryRepository;
 import com.jerry.jerryShop.exception.DataNotFoundException;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /*
  * JerryShop Product Service
@@ -23,13 +22,14 @@ import lombok.RequiredArgsConstructor;
  * Copyright (C) 2022 by Jerry, All right reserved.
  */
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class ProductService {
 private final ProductRepository productRepository;
 
 	public List<Product> findAll(){
-		return this.productRepository.findAll();
+		return this.productRepository.findAll(Sort.by(Sort.Direction.DESC, "registrationDate"));
 	}
 
 	public void create(HashMap<String, Object> productFrm) throws ParseException {
@@ -78,7 +78,7 @@ private final ProductRepository productRepository;
 		}
 	}
 	
-	public void modify(Long id, HashMap<String, Object> productFrm) throws ParseException {
+	public Product modify(Long id, HashMap<String, Object> productFrm) throws ParseException {
 		
 		String productName = productFrm.get("productName").toString();
 		long price = Long.parseLong(productFrm.get("price").toString());
@@ -88,6 +88,8 @@ private final ProductRepository productRepository;
 		String origin = productFrm.get("origin").toString();
 		String imageName = productFrm.get("imageName").toString();
 		String imagePath = productFrm.get("imagePath").toString();
+		log.info("imagePath : .... " + imagePath);
+		
 		String detail = productFrm.get("detail").toString();
 		String delivery = productFrm.get("delivery").toString();
 
@@ -117,7 +119,7 @@ private final ProductRepository productRepository;
 		product.setHit(0);
 		product.setRegistrationDate(LocalDateTime.now());
 		
-		this.productRepository.save(product);
+		return this.productRepository.save(product);
 
 	}
 	

@@ -58,8 +58,10 @@ $("#thumbnail-area").on("click", ".removeBtn", function(e){
 	let fileName = target.data("name");
 	let targetDiv = $(this).closest("div");
 
+	targetDiv.remove();
+
 	$.ajax({
-		type: 'POST',
+		type: 'DELETE',
 		url: '/removeFile',
 		data: {"fileName" : fileName},
 		beforeSend: function (xhr){
@@ -67,7 +69,8 @@ $("#thumbnail-area").on("click", ".removeBtn", function(e){
 		},
 		success: function(result){
 			if(result === true){
-				targetDiv.remove();
+				console.log("삭제 성공 : " + result)
+			}else{
 			}
 		}
 		});
@@ -107,8 +110,8 @@ $("#productCreateBtn").click(function(){
 		swal("필수입력", "가격을 입력해주세요.", "warning");
 	}else if(!productFrm.category1){
 		swal("필수입력", "대분류를 선택해주세요.", "warning");
-	}else if(!productFrm.category2){
-		swal("필수입력", "소분류를 선택해주세요.", "warning");
+	}else if(!productFrm.imageName && !productFrm.imagePath){
+		swal("필수입력", "이미지를 업로드 해주세요.", "warning")
 	}else{
 		$.ajax({
 		type: 'POST',
@@ -136,20 +139,6 @@ $("#category1").change(function(){
 	let parent = $("#category1 option:selected").val();
 	$("#category2 option").remove();  
 	$("#category2").append('<option value="">소분류</option>');
-	
-	/*
-	$.ajax({
-			url: '/category/list/child',
-			data: {
-				"parent" : parent
-			},
-			type: 'GET',
-			success: function(result){
-				console.log(result)
-				showCategory2List(result);
-			}
-		});
-	*/
 	category2List(parent);
 })
 

@@ -25,6 +25,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -91,7 +92,7 @@ public class UploadController {
 		return new ResponseEntity<>(uploadResultList, HttpStatus.OK);
 	}
 	
-	@PostMapping("/removeFile")
+	@DeleteMapping("/removeFile")
 	public ResponseEntity<Boolean> removeFile(String fileName){
 		String srcFileName = null;
 		
@@ -116,7 +117,7 @@ public class UploadController {
 	@GetMapping("/display")
 	public ResponseEntity<byte[]> getImage(String fileName){
 		log.info("getImage().........." + fileName);
-		
+		System.out.println("fileName 1 : " + fileName.substring(fileName.lastIndexOf("/")+1));
 		File file = new File(uploadPath +"/"+fileName);
 		log.info("getImage() Thumbnail Path.........." + file);
 		ResponseEntity<byte[]> result = null;
