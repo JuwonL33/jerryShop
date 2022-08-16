@@ -202,4 +202,49 @@ public class MemberController {
 		
 		return json;
     }
+    
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/mypage/deleteMyInfo")
+    public @ResponseBody Map<String, Boolean> deleteMyInfo(Principal principal, String username){
+    	log.info("username : " + username);
+    	HashMap<String, Boolean> json = new HashMap<>();
+    	
+    	Optional<Member> _member = this.memberService.findByusername(username);
+		if(_member.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 사용자입니다.");
+		}
+		
+		Member member = _member.get();
+		
+		boolean result = this.memberService.deleteUsername(member);
+		json.put("result", result);
+		
+		return json;
+    }
+    
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/mypage/checkPassword")
+    public String checkPassword(Principal principal) {
+    		
+    	boolean result = false;
+    	Optional<Member> _member = this.memberService.findByusername(principal.getName());
+		if(_member.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "접근할 수 없습니다.");
+		}
+		
+		return "member/delete_form";
+    }
+    
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/mypage/checkPassword")
+    public boolean checkPassword(Principal principal, String curPassword) {
+    		
+    	boolean result = false;
+    	Optional<Member> _member = this.memberService.findByusername(principal.getName());
+		if(_member.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 사용자입니다.");
+		}
+		Member member = _member.get();
+		return this.memberService.checkPassword(member, curPassword);
+    }
 }

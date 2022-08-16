@@ -103,7 +103,6 @@ public class UploadController {
 			boolean result = file.delete();
 			System.out.println("원본 삭제 : " + result);
 			File thumbnail = new File(file.getParent(), "s_" + file.getName());
-			System.out.println("썸네일 : " + thumbnail);
 			
 			result = thumbnail.delete();
 			System.out.println("썸네일 삭제 : " + result);
@@ -137,7 +136,6 @@ public class UploadController {
 	private String makeFolder() {
 		
 		String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/DD"));
-		
 		String folderPath = str.replace("/", File.separator);
 		
 		// make folder

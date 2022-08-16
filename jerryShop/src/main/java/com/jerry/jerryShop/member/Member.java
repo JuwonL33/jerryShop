@@ -53,4 +53,7 @@ public class Member {
 	@Column(columnDefinition = "varchar(10) default 'blue'")
 	private String memberGrade;
 	
+	@Column(columnDefinition = "char(1) default 'N'")
+	private char deleteYn;
+	
 }

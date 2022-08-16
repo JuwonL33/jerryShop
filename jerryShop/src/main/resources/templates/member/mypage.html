@@ -149,5 +149,23 @@
 	        }
 	    }).open();
 	}
+	
+	$("#deleteMyInfo").click(function(){
+		swal({title:"알림", 
+			  text:"정말 탈퇴하시겠습니까?", 
+			  icon:"warning",
+			  buttons: {
+				cancel : "Cancel",
+				catch : {
+					text : "OK",
+					value : "OK"
+				}
+			  }
+		  }).then((OK) => {
+			location.href="/member/mypage/checkPassword";
+		})
+	});
+	
+
 </script>
 </html>

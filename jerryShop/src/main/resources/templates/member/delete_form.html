@@ -1,0 +1,81 @@
+<html layout:decorate="~{memberInfo}">
+<div layout:fragment="content" class="container my-3">
+	<div class="page-body" style="display: block;">
+	    <div class="my-3">
+	        <div>
+	            <h2 class="member_title">탈퇴</h2>
+	        </div>
+	    </div>
+
+	    <form role="form" name="myInfoFrm" id="myInfoFrm">
+	        <div class="member-join-form mt-5">
+		        <div class="mb-3">
+		            <input type="password" id="checkPwdBeforeDelete1" class="txt-form form-control" placeholder="비밀번호">
+		        </div>
+		        <div class="mb-3">
+		            <input type="password" id="checkPwdBeforeDelete2" class="txt-form form-control" placeholder="비밀번호 확인">
+		        </div>
+	        </div>
+	        
+	        <div class="mt-5">
+	        	<a type="button" id="submitDeleteForm" class="member_button btn btn-danger btn-lg btn-block">제출</a>
+	        	<a href="javascript:history.back()" class="member_button btn btn-dark btn-lg btn-block">취소</a>
+	        </div>
+	    </form>
+	</div>
+</div>
+
+<script layout:fragment="script" type='text/javascript'>
+	let header = $("meta[name='_csrf_header']").attr("content");
+    let token = $("meta[name='_csrf']").attr("content");
+
+
+	let checkPwdBeforeDelete1 = $("#checkPwdBeforeDelete1").val();
+	let checkPwdBeforeDelete2 = $("#checkPwdBeforeDelete2").val();
+		if(checkPwdBeforeDelete1 !== checkPwdBeforeDelete2){
+			swal("경고", "입력하신 비밀번호가 서로 일치하지 않습니다.", "warning")
+		}else{
+			$.ajax({
+				type: "POST",
+				url : "/member/mypage/checkPassword",
+				data : {
+					"curPassword" : checkPwdBeforeDelete1
+				},
+				beforeSend: function (xhr){
+			       xhr.setRequestHeader(header, token);
+				},
+				success : function(result){
+					if(result){
+						const username = $("#username").val();
+						deleteUserInfo(username)
+					}else{
+						swal("실패", "비밀번호가 일치하지 않습니다.", "error");
+					}
+			
+					}
+		})
+		}
+	function deleteUserInfo(username){
+		$.ajax({
+		type: "POST",
+		url : "/member/mypage/deleteMyInfo",
+		data : {
+			"username" : username
+		},
+		beforeSend: function (xhr){
+	       xhr.setRequestHeader(header, token);
+		},
+		success : function(result){
+			if(result){
+				swal("성공", "탈퇴 완료 되었습니다", "success").then((OK) => {
+					window.location = "/member/login";	
+				})
+			}else{
+				swal("실패", "탈퇴 실패했습니다", "error");
+			}
+	
+			}
+		});
+	}
+</script>
+</html>

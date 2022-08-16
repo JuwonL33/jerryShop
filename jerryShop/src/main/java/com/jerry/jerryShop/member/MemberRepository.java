@@ -3,6 +3,8 @@ package com.jerry.jerryShop.member;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /*
  * JerryShop Member Repository
@@ -13,10 +15,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-	Optional<Member> findByusername(String username);
+
+	@Query(value = "select m from Member m where m.deleteYn = 'N' and m.username = :username")
+	Optional<Member> findByusername(@Param(value="username") String username);
 	
 	Optional<Member> findUsernameByNameAndEmail(String name, String email);
 	
 	Optional<Member> findByUsernameAndEmail(String username, String email);
+
 
 }

@@ -77,4 +77,22 @@ public class MemberService {
 			return true;
 		}
 	}
+	
+	public boolean deleteUsername(Member member) {
+		if(member.getDeleteYn() != 'Y') {
+			member.setDeleteYn('Y');
+			this.memberRepository.save(member);
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	public boolean checkPassword(Member member, String curPassword) {
+		if(!passwordEncoder.matches(curPassword, member.getPassword())) {
+			return false;
+		}else{
+			return true;
+		}
+	}
 }
